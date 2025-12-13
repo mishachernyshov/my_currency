@@ -1,0 +1,24 @@
+FROM python:3.11-slim-trixie
+
+RUN apt-get update \
+    && apt-get install --no-install-recommends -y \
+	    make \
+    && apt-get clean \
+    && rm -rf /var/cache/apt/* \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/*
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+ARG APP_USER_ID=1000
+RUN if [ "$APP_USER_ID" = 0 ]; then echo "app user may not be root" && false; fi \
+    && useradd --no-log-init --create-home --shell /bin/bash --uid ${APP_USER_ID} app
+
+USER app
+
+WORKDIR /app
+
+COPY --chown=app:app pyproject.toml uv.lock README.md Makefile ./
+COPY --chown=app:app src/ /app/src/
+
+RUN uv sync --group test --group lint --no-cache

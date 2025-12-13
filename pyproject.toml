@@ -1,0 +1,48 @@
+[project]
+name = "my-currency"
+version = "0.1.0"
+description = "A web platform that allows users to calculate currency exchange rates."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "django>=5.2.9",
+    "django-ordered-model>=3.7.4",
+    "djangorestframework>=3.16.1",
+    "psycopg2-binary>=2.9.11",
+    "whitenoise>=6.11.0",
+]
+
+[build-system]
+requires = ["uv_build >= 0.9.11, <0.10.0"]
+build-backend = "uv_build"
+
+[project.entry-points."my_currency.provider"]
+currency_beacon = "src.exchange_rate_providers.currency_beacon:CurrencyBeaconProvider"
+mock = "src.exchange_rate_providers.mock:MockProvider"
+
+[dependency-groups]
+lint = [
+    "ruff>=0.14.9",
+]
+test = [
+    "pytest>=9.0.2",
+]
+dev = [
+    "uvicorn>=0.38.0",
+]
+prod = [
+    "uvicorn>=0.38.0",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+skip-magic-trailing-comma = true
