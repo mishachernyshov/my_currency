@@ -38,6 +38,9 @@ logs:
 stop:
 	docker compose -f docker/docker-compose.yml stop
 
+load_fixtures:
+	docker compose -f docker/docker-compose.yml exec web bash -c "uv run python3 manage.py loaddata core/fixtures/*"
+
 lint:
 	$(call run_test_image_command, make ruff)
 

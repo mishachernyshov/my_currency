@@ -14,3 +14,11 @@ from django.core.asgi import get_asgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'my_currency.settings.development')
 
 application = get_asgi_application()
+
+from common.utils.networking import session
+
+
+async def lifespan(app):
+    yield
+    if session:
+        await session.close()

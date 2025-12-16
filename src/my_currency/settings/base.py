@@ -38,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'adrf',
+    'rest_framework',
+    'ordered_model',
+
     'core.apps.CoreConfig',
 ]
 
