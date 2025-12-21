@@ -29,11 +29,17 @@ rebuild:
 run-all:
 	docker compose -f docker/docker-compose.yml up -d
 
-web-shell:
+shell-web:
 	docker exec -it $(WEB_CONTAINER_NAME) bash
+
+attach-web:
+	docker compose -f docker/docker-compose.yml attach web
 
 logs:
 	docker compose -f docker/docker-compose.yml logs -f
+
+restart-web:
+	docker compose -f docker/docker-compose.yml restart web
 
 stop:
 	docker compose -f docker/docker-compose.yml stop
