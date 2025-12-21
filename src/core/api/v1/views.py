@@ -1,9 +1,11 @@
 from adrf.views import APIView
+from adrf.viewsets import ModelViewSet
 from asgiref.sync import sync_to_async
 from rest_framework.response import Response
 
+from core.models import Currency
 from core.services import convert_amount, get_currency_rates
-from .serializers import ConvertAmountQuerySerializer, CurrencyRatesTimeSeriesQuerySerializer
+from .serializers import ConvertAmountQuerySerializer, CurrencyRatesTimeSeriesQuerySerializer, CurrencySerializer
 
 
 class CurrencyRatesTimeSeriesView(APIView):
@@ -34,3 +36,8 @@ class ConvertAmountView(APIView):
         )
 
         return Response({'value': converted_value})
+
+
+class CurrencyViewSet(ModelViewSet):
+    queryset = Currency.objects.all()
+    serializer_class = CurrencySerializer

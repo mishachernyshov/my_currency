@@ -1,5 +1,6 @@
 import datetime
 
+from adrf import serializers as async_serializers
 from django.utils import timezone
 from rest_framework import serializers
 
@@ -60,3 +61,9 @@ class ConvertAmountQuerySerializer(serializers.Serializer):
 
         if source_currency.code == exchanged_currency.code:
             raise serializers.ValidationError('Source currency and exchanged currency must be different.')
+
+
+class CurrencySerializer(async_serializers.ModelSerializer):
+    class Meta:
+        model = Currency
+        fields = '__all__'
