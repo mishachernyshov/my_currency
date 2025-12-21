@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from ordered_model.models import OrderedModel
 
-from core.managers import ExchangeRateProviderConfigManager
+from core.querysets import ExchangeRateProviderConfigQuerySet
 
 
 class Currency(models.Model):
@@ -36,7 +36,7 @@ class CurrencyExchangeRate(models.Model):
     rate_value = models.DecimalField(decimal_places=6, max_digits=18)
 
     def __str__(self) -> str:
-        return f'{self.source_currency.code} → ({self.exchanged_currency.code})'
+        return f'{self.source_currency.code} → {self.exchanged_currency.code} ({self.valuation_date})'
 
     class Meta:
         constraints = [
@@ -57,7 +57,7 @@ class ExchangeRateProviderConfig(OrderedModel):
     provider = models.CharField(max_length=128, verbose_name=_('Provider'))
     is_active = models.BooleanField(default=True, verbose_name=_('Is active'))
 
-    objects = ExchangeRateProviderConfigManager()
+    objects = ExchangeRateProviderConfigQuerySet.as_manager()
 
     def __str__(self) -> str:
         return f'{self.provider} ({self.order}) {"✔" if self.is_active else "✘"}'

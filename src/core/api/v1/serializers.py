@@ -14,15 +14,10 @@ def validate_date_from_range(value, min_date, max_date):
     return value
 
 
-def validate_currency_choice(value):
-    if not Currency.objects.filter(code=value).exists():
-        raise serializers.ValidationError(f'The currency code "{value}" is not supported.')
-
-
 class CurrencyRatesTimeSeriesQuerySerializer(serializers.Serializer):
     MIN_SUPPORTED_DATE = datetime.date(1970, 1, 1)
 
-    source_currency = serializers.CharField(validators=[validate_currency_choice])
+    source_currency = serializers.SlugRelatedField(queryset=Currency.objects.all(), slug_field='code')
     date_from = serializers.DateField()
     date_to = serializers.DateField()
 
@@ -49,9 +44,9 @@ class CurrencyRatesTimeSeriesQuerySerializer(serializers.Serializer):
 
 
 class ConvertAmountQuerySerializer(serializers.Serializer):
-    source_currency = serializers.CharField(validators=[validate_currency_choice])
+    source_currency = serializers.SlugRelatedField(queryset=Currency.objects.all(), slug_field='code')
     amount = serializers.DecimalField(max_digits=20, decimal_places=2)
-    exchanged_currency = serializers.CharField(validators=[validate_currency_choice])
+    exchanged_currency = serializers.SlugRelatedField(queryset=Currency.objects.all(), slug_field='code')
 
     def validate(self, attrs):
         self._validate_source_currency_differs_from_exchanged_currency(attrs)
@@ -63,5 +58,5 @@ class ConvertAmountQuerySerializer(serializers.Serializer):
         source_currency = attrs['source_currency']
         exchanged_currency = attrs['exchanged_currency']
 
-        if source_currency == exchanged_currency:
+        if source_currency.code == exchanged_currency.code:
             raise serializers.ValidationError('Source currency and exchanged currency must be different.')

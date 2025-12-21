@@ -9,7 +9,7 @@ from .serializers import ConvertAmountQuerySerializer, CurrencyRatesTimeSeriesQu
 class CurrencyRatesTimeSeriesView(APIView):
     async def get(self, request) -> Response:
         serializer = CurrencyRatesTimeSeriesQuerySerializer(data=request.query_params)
-        await sync_to_async(lambda: serializer.is_valid(raise_exception=True))()
+        await sync_to_async(serializer.is_valid)(raise_exception=True)
         query_params = serializer.validated_data
 
         currency_rates = await get_currency_rates(
@@ -24,7 +24,7 @@ class CurrencyRatesTimeSeriesView(APIView):
 class ConvertAmountView(APIView):
     async def get(self, request) -> Response:
         serializer = ConvertAmountQuerySerializer(data=request.query_params)
-        await sync_to_async(lambda: serializer.is_valid(raise_exception=True))()
+        await sync_to_async(serializer.is_valid)(raise_exception=True)
         query_params = serializer.validated_data
 
         converted_value = await convert_amount(
