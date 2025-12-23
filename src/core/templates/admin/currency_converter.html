@@ -1,0 +1,48 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/forms.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'core/css/currency_converter.css' %}">
+  <script src="{% static 'core/js/currency_converter.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<div id="content">
+  <h1>Calculate currency rates</h1>
+
+  <div id="content-main">
+    <form id="currency-exchanging-form" method="post">
+      {% csrf_token %}
+      <fieldset class="module aligned">
+        <div class="currency-container">
+          {{ source_currency_form.as_div }}
+        </div>
+
+        <img id="convert-img" src="{% static 'core/images/convert.png' %}" alt="Logo">
+
+        {{ exchanged_currency_formset.management_form }}
+
+        <div id="exchanged-currency-formset">
+          {% for form in exchanged_currency_formset %}
+            <div class="currency-container exchanged-currency-form">
+              {{ form.as_div }}
+
+              <input class="delete-exchanged-currency-btn {% if forloop.first %}hidden{% endif %}" type="button" value="Delete" />
+            </div>
+
+            {% if forloop.last %}
+              <input id="add-exchanged-currency" type="button" value="Add exchanged currency" />
+            {% endif %}
+          {% endfor %}
+        </div>
+      </fieldset>
+      <div class="submit-row">
+        <input id="convert-btn" class="default" type="submit" value="Convert" />
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

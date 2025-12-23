@@ -1,0 +1,8 @@
+{% extends "admin/base.html" %}
+
+{% block nav-global %}
+<div style="background-color: #417690; padding: 10px 20px;">
+    <a href="{% url 'admin:index' %}" style="color: white; margin-right: 20px;">Home</a>
+    <a href="{% url 'admin:currency-converter' %}" style="color: white; margin-right: 20px;">Currency Converter</a>
+</div>
+{% endblock %}
