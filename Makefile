@@ -23,6 +23,8 @@ define run_test_image_command
 	$(call clean_docker, $(TEST_WEB_IMAGE_NAME))
 endef
 
+build: rebuild load_fixtures
+
 rebuild:
 	docker compose -f docker/docker-compose.yml up --build -d
 
